@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import Link from "next/link";
 import logo from "../../../public/s.png";
 import Image from "next/image";
-import Input from "@/components/Input/Input";
+import Input from "@/components/Input/OldInput";
 import axios from "axios";
 import { useState } from "react";
 import Error from "@/components/Error/Error";

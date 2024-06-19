@@ -1,4 +1,7 @@
+import { Field } from "formik";
 import styles from "./input.module.css";
+import { TextField, TextFieldProps, ThemeProvider, createTheme } from "@mui/material";
+import { ReactNode, useEffect, useState } from "react";
 type props = {
     error: string | undefined;
     value: string;
@@ -6,21 +9,74 @@ type props = {
     name: string
 };
 
-export default function Input({ error, value, handleChange, name }: props) {
+type InputProps = {
+    name: string;
+    label: string;
+    placeholder?: string;
+    disabled?: boolean;
+    className?: string;
+    error?: string | undefined;
+    handleChange?: any;
+    type?: "text" | "email" | "password";
+};
+
+const theme = createTheme({
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            '& label': {
+            color: 'white',
+            },
+            '& label.Mui-focused': {
+            color: 'white',
+            },
+
+            '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'transparent',
+            },
+            '&:hover fieldset': {
+                borderColor: 'transparent',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'transparent',
+            },
+            },
+        },
+    },
+      },
+    },
+  });
 
 
-    return(
-        <>  
-        <div className="w-[58%] flex flex-row items-center justify-between">
-            <h3>{name}:</h3>
-            <h3 className="text-error text-sm py-1 min-h-[28px]">{error && error}</h3>
+
+export default function Input({name, label, className, disabled, error, placeholder = "", handleChange, type="text" }: InputProps) {
+    const [value, setValue] = useState<string>();
+
+    return (
+        <div>
+            <ThemeProvider theme={theme}>
+                <Field name={name} type={type}>
+                    {({field, form}: any) => (
+                        <TextField 
+                        {...field}
+                        name={field.name}
+                        label={label}
+                        value={field.value}
+                        onChange={handleChange}
+                        disabled={disabled}
+                        error={error}
+                        type={type}
+                        placeholder={placeholder}
+                        InputProps={{
+                            className: className,
+                            }}
+                            
+                            />
+                            )}
+                </Field>
+            </ThemeProvider>
         </div>
-            <input type={name === "senha" ? 'password' : name} name={name} onChange={handleChange}
-                value={value} placeholder={`${name}: `}
-                className={`${styles.input} border-2 outline-none 
-                ${error && error ? "border-error focus:border-error"
-                        : "border-primary focus:border-primary"} `} />
-        </>
-
-    );
+    )
 }
