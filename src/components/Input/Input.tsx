@@ -17,8 +17,9 @@ export default function Input({ error, value, handleChange, name }: props) {
         </div>
             <input type={name === "senha" ? 'password' : name} name={name} onChange={handleChange}
                 value={value} placeholder={`${name}: `}
-                className={`${styles.input} border-2 outline-none 
-                ${error && error ? "border-error focus:border-error"
+                className={`w-[60%] h-[70%] min-h-[70%] p-[8px] bg-inherit 
+                rounded-[10px] font-semibold border-2 outline-none ${error && error ?
+                        "border-error focus:border-error"
                         : "border-primary focus:border-primary"} `} />
         </>
 

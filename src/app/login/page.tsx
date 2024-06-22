@@ -1,10 +1,9 @@
 'use client';
 import { useFormik } from "formik";
 import Link from "next/link";
-import logo from "../../../public/s.png";
+import logo from "../../../public/logo.png";
 import Image from "next/image";
 import Input from "@/components/Input/Input";
-import axios from "axios";
 import { useState } from "react";
 import Error from "@/components/Error/Error";
 import Button from "@/components/Button/Button";
@@ -49,7 +48,7 @@ export default function Login() {
 
     return (
         <div className="w-screen h-screen absolute flex justify-center items-center">
-            <div className="w-full bg-inherit md:bg-[#242526] md:w-2/3 xl:w-1/3 h-3/4 p-4 rounded-xl flex flex-col items-center justify-center">
+            <div className="w-full bg-inherit md:bg-[#18181B] md:w-2/3 xl:w-1/3 h-3/4 p-4 rounded-xl flex flex-col items-center justify-center">
                 {error !== "" &&
                     <div className="w-1/4 absolute -translate-y-[34vh]">
                         <Error error={error} />

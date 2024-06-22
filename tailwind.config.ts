@@ -18,6 +18,15 @@ const config: Config = {
         'primary': '#8B5CF6',
         'secundary': '#10B981', 
         'error': "#cf6679"
+      },
+      animation: {
+        flip: "flip 0.8s ease",
+      },
+      keyframes: {
+        flip: {
+          '0%': { transform: "rotateX(0)" },
+          "100%": { transform: "rotateX(180deg)" },
+        }
       }
     },
   },
