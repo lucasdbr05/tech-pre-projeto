@@ -37,7 +37,8 @@ export const returnData = () => {
       title: "Camisa Expand your mind",
       price: 69,
       imgUrl: "/[patrocinador]do-while22-t-shirt 1.png"
-    }
+    },
+
   ];
 }
 

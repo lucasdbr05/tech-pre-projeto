@@ -3,7 +3,7 @@ import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
 import { Form, Formik, FormikProps } from "formik";
 import * as Yup from 'yup';
-import logo from "../../../public/s.png";
+import logo from "../../../public/logo.png";
 import Link from "next/link";
 import Image from "next/image";
 

@@ -12,15 +12,13 @@ export default function ItemTag({ isBig, hovered, title, price }: { isBig: boole
                 setSliceSize(isBig ? 10 : 5);
             } else if (screenWidth >= 640 && screenWidth < 768) {
                 setSliceSize(isBig ? 13 : 3);
-            } else if (screenWidth >= 768 && screenWidth < 1024) {
-                setSliceSize(isBig ? 20 : 14);
             } else {
-                setSliceSize(isBig ? 25 : 14);
+                setSliceSize(isBig ? 20 : 14);
             }
         };
 
         handleResize(); 
-    }, [isBig, window.innerHeight]);
+    }, []);
 
     return (
         <div className={`absolute bg-[#0a0a0b] border-[#71717A] 

@@ -1,4 +1,3 @@
-import styles from "./input.module.css";
 type props = {
     error: string | undefined;
     value: string;
@@ -17,9 +16,9 @@ export default function Input({ error, value, handleChange, name }: props) {
         </div>
             <input type={name === "senha" ? 'password' : name} name={name} onChange={handleChange}
                 value={value} placeholder={`${name}: `}
-                className={`${styles.input} border-2 outline-none 
+                className={` border-2 outline-none w-[60%] h-[70%] min-h-[70%] p-[8px]
                 ${error && error ? "border-error focus:border-error"
-                        : "border-primary focus:border-primary"} `} />
+                        : "border-primary focus:border-primary"} bg-inherit rounded-lg `} />
         </>
 
     );
