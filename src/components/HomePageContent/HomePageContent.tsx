@@ -30,12 +30,12 @@ export default function HomePageContent() {
           </div>
         </div>
 
-        <div className="w-full  flex flex-col items-center justify-evenly px-10 ">
+        <div className="w-full flex flex-col items-center justify-evenly px-10 ">
           <h1 className="text-3xl font-bold mb-10">Todos os Produtos</h1>
           <div className="w-full max-w-screen-xl h-full max-h-full grid grid-flow-row grid-cols-2 lg:grid-cols-3 gap-10 justify-center ">
             {data && data.map((product: Product, index: number) => {
               return (
-                <div key={index} className="w-[10rem] md:w-[23rem] lg:w-[26rem] md:h-96 lg:h-[26rem]  flex items-center justify-center">
+                <div key={index} className="w-[10rem] md:w-[23rem] lg:w-[26rem] h-60`` md:h-96 lg:h-[26rem] flex items-center justify-center">
                   <ItemCard product={product} isBig={false} />
                 </div>
               );
