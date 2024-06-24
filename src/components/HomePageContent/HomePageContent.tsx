@@ -1,9 +1,9 @@
 'use client'
 import { useQuery } from "@tanstack/react-query";
-import { returnData } from "@/app/page";
 import Header from "../Header/Header";
 import ItemCard from "../ItemCard/ItemCard";
 import Product from "@/models/product";
+import { returnData } from "@/utils/mockData";
 
 
 export default function HomePageContent() { 
