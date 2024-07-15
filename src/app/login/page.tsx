@@ -7,10 +7,13 @@ import Input from "@/components/Input/OldInput";
 import { useState } from "react";
 import Error from "@/components/Error/Error";
 import Button from "@/components/Button/Button";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const router = useRouter()
 
     const formik = useFormik({
         initialValues: {
@@ -18,15 +21,19 @@ export default function Login() {
             password: '',
         },
         onSubmit: async (values) => {
-            console.log(values)
             setLoading(true);
-            try{
-                // Todo: criar logica de request
-                setLoading(false);
-            } catch (e: any) {
-                setError(e.data.error);
-                setLoading(false);
+            const result = await signIn('credentials', {
+                email: values.email,
+                password: values.password,
+                redirect: false,
+            })
+            setLoading(false);
+            if(result?.error){
+                setError(result.error);
+                return;
             }
+
+            router.push("/")
         },
         validate: (value) => {
             let errors: { email?: string, password?: string } = {};

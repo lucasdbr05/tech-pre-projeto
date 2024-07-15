@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
+import Providers from "./providerQuery";
 const inter = Inter({ subsets: ["latin"] });
+import NextAuthProvider from "./providerSession";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,9 +18,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Providers>
-        <body className={`${inter.className} bg-dark w-screen h-screen text-white overflow-x-hidden`}>{children}</body>
-      </Providers>
+      <NextAuthProvider>
+        <body className={`${inter.className} bg-dark w-screen h-screen text-white overflow-x-hidden`}>
+          <Providers>
+            {children}
+          </Providers>
+        </body>
+      </NextAuthProvider>
     </html>
   );
 }
