@@ -1,10 +1,11 @@
 import axios from "axios";
+import { AdapterUser } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { extname } from "path";
 
-
-interface MyUser {
+interface User {
     id: number;
     email: string;
     name: string;
@@ -17,24 +18,34 @@ interface MyUser {
     updatedAt: string;
 }
 
-interface Tokens {
-    access_token: string;
-    refresh_token: string;
+interface CustomUser extends AdapterUser {
+    user: User
+    tokens: {
+        access_token: string;
+        refresh_token: string;
+    };
 }
 
-async function refreshToken(token: JWT) {
+interface CustomJWT extends JWT {
+    user?: User;
+    accessToken?: string;
+    refreshToken?: string;
+    exp?: number;
+}
+
+async function refreshToken(token: CustomJWT): Promise<CustomJWT> {
     const headers = {
         authorization: `Bearer ${token.refreshToken}`,
     };
 
-
     try {
-        const res = await axios.post("http://localhost:3333/auth/refresh", {}, { headers });
+        const res = await axios.post(process.env.API_URL + "/auth/refresh", {}, { headers });
 
         return {
             ...token,
             accessToken: res.data.access_token,
             refreshToken: res.data.refresh_token,
+            exp: Date.now() + res.data.expires_in * 1000, // Set the expiration time
         };
     } catch (error) {
         console.error('Error occurred during token refresh:', error);
@@ -60,25 +71,24 @@ const handler = NextAuth({
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, req): Promise<CustomUser | null> {
                 const data = {
                     email: credentials?.email,
                     password: credentials?.password,
                 };
 
                 try {
-                    const res = await axios.post("http://localhost:3333/auth/signin", data);
+                    const res = await axios.post(process.env.API_URL + "/auth/signin", data);
 
                     if (res.data) {
-                        const user: MyUser & { tokens: Tokens } = {
-                            ...res.data.user,
+                        // nao consegui tirar a necessidade de ter {email, id, emailVarified} entao ta duplicado ai mesmo :(
+                        return {
+                            email: res.data.user.email,
+                            id: res.data.user.id,
+                            emailVerified: null,
+                            user: res.data.user,
                             tokens: res.data.tokens,
                         };
-
-                        return {
-                            user: res.data.user,
-                            tokens: user.tokens,
-                        } as any; 
                     }
                     return null;
                 } catch (error) {
@@ -89,18 +99,22 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async jwt({ token, user, trigger }) {
+        async jwt({ token, user, trigger }): Promise<CustomJWT> {
+            const customToken = token as CustomJWT;
             if (user) {
-                token.user = user.user;
-                token.accessToken = user.tokens.access_token;
-                token.refreshToken = user.tokens.refresh_token;
+                const customUser = user as CustomUser;
+                if (customUser.user && customUser.tokens) {
+                    customToken.user = customUser.user;
+                    customToken.accessToken = customUser.tokens.access_token;
+                    customToken.refreshToken = customUser.tokens.refresh_token;
+                }
 
-                return token;
+                return customToken;
             }
 
-            if (new Date().getTime() < new Date(token.exp).getTime()) return token
+            if (customToken.exp && new Date().getTime() < new Date(customToken.exp).getTime()) return token
 
-            return await refreshToken(token) 
+            return await refreshToken(token as CustomJWT);
         },
         async session({ session, token }) {
             if (token && token.user) {
